@@ -738,14 +738,9 @@ def compare_files(clist, okroot=None, tda=None, tra=None, cleanup=True):
 
     for n, x in enumerate(clist):
         # make sure we are looking in the right place for the reference file
-        if 'PDK_REFS' in list(os.environ.keys()):
+        if 'PDK_REFS' in os.environ:
             PDK_REFS = os.environ['PDK_REFS']
-            here = os.path.abspath(os.curdir)
-            relpath = os.path.relpath(
-                here,
-                os.environ['PDK_TOP']
-            )
-            x['reference'] = os.path.join(PDK_REFS, relpath, x['reference'])
+            x['reference'] = os.path.join(PDK_REFS, x['reference'])
 
         # perform the comparison
         try:
