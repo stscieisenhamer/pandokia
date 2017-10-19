@@ -31,8 +31,13 @@ def read_record(f):
     found_any = 0
 
     while True:
+        try:
+            l = f.readline()
+        except UnicodeDecodeError as e:
+            print('UNICODE ERROR - {}'.format(e))
+            line_count = line_count + 1
+            continue
 
-        l = f.readline()
         line_count = line_count + 1
         if l == "":
             # EOF - invalid if we saw any data (no END)
@@ -46,7 +51,7 @@ def read_record(f):
 
         l = l.strip()
 
-        if l == "":
+        if not l:
             # blank lines allowed
             continue
 
@@ -114,11 +119,12 @@ def read_record(f):
                 exit_status = 1
             stuff = StringIO.StringIO()
             while True:
-
                 try:
-                    l = f.readline().decode()
-                except AttributeError as e:
                     l = f.readline()
+                except UnicodeDecodeError as e:
+                    print('UNICODE ERROR - {}'.format(e))
+                    line_count = line_count + 1
+                    continue
 
                 line_count = line_count + 1
                 if l == "":
